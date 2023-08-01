@@ -26,5 +26,15 @@ class RegisterForm(UserCreationForm):
             raise forms.ValidationError('Este correo electrónico ya está registrado')
         return email_field
       
-class ResetPassword(forms.Form):
-                
+class ConfirmarMail(forms.Form):
+    email= forms.EmailField(max_length=200) 
+    
+    def clean_email(self):
+        email_field = self.cleaned_data['email']
+        email=Perfil.objects.filter(email=email_field)
+        
+        if not email.exists():
+            raise forms.ValidationError('El correo electrónico no está registrado')
+        elif email.activo==False:
+            raise forms.ValidationError('La cuenta a la que pertenece su correo no está activada.\n Por favor, revise su correo.')
+        return email_field           
