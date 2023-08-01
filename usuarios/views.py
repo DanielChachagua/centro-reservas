@@ -2,7 +2,7 @@ from typing import Any, Dict
 from django import http
 from django.db.models.query import QuerySet
 from django.http import JsonResponse,HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 from django.core.mail import EmailMessage
@@ -31,8 +31,6 @@ class PerfilesListView(ListView):
         data={'name':'Daniel'}
         return JsonResponse(data)
     
-        
-    
     #Trae el contenido de la consulta, se suele enviar en ['object_list']
     def get_queryset(self):
         return Perfil.objects.all()
@@ -48,8 +46,8 @@ class PerfilCreateView(CreateView):
     model=Perfil
     form_class=RegisterForm
     template_name='usuarios/crear.html'
-    success_url = reverse_lazy('usuarios:lista_usuarios')  # Cambia 'nombre_de_la_url_exitosa' por la URL a la que quieres redirigir
-
+    #success_url = reverse_lazy('usuarios:lista_usuarios')  # Cambia 'nombre_de_la_url_exitosa' por la URL a la que quieres redirigir
+    
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs) -> HttpResponse:
         return super().dispatch(request, *args, **kwargs)
@@ -62,14 +60,15 @@ class PerfilCreateView(CreateView):
         mensaje={}
         try:
             email= data['email']
+            token=data['token']
+            url='http://'+self.request.META['HTTP_HOST']+'/usuarios/confirmar/'+str(token)
             nombre_apellido=data['first_name'] +" "+data['last_name']
             asunto="Trabaja con nosotros"
             from_email=settings.EMAIL_HOST_USER
             to=email
-            token=''
             template=render_to_string('emails/confirmar_email.html',{
                 'nombre':nombre_apellido,
-                'token':token
+                'link_confirmacion':url
             })
             message=strip_tags(template)
             send_mail(asunto,message,from_email,[to],html_message=template)
@@ -83,14 +82,22 @@ class PerfilCreateView(CreateView):
             form= RegisterForm(request.POST)
             if form.is_valid():
                 data=form.cleaned_data
+                perfil = form.save(commit=False)
+                perfil.token=uuid.uuid4()
+                perfil.save()
+                data['token']=perfil.token
                 self.send_mail_confirmacion(data)
-                form.save()
                 return redirect('usuarios:lista_usuarios')
             else:
                 print(form.errors)
         except Exception as e:
             print(str(e))
            
-                        
+def confirmar_mail(request,token):
+    perfil=get_object_or_404(Perfil,token=token)
+    perfil.activo=True
+    perfil.token=None
+    perfil.save()
+    return redirect('usuarios:lista_usuarios')
 
         

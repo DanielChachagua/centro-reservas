@@ -9,7 +9,7 @@ class User(AbstractUser):
 class Perfil(User):
     fecha_nacimiento=models.DateField(verbose_name='Fecha_nacimiento')
     telefono=models.CharField(max_length=50,verbose_name='Telefono')
-    token=models.CharField(max_length=200,null=True,blank=True,verbose_name='Token')
+    token=models.UUIDField(null=True,blank=True,editable=True,verbose_name='Token')
     activo=models.BooleanField(default=False, verbose_name='Activo')
     
     class Meta:
