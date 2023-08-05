@@ -1,0 +1,6 @@
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form}}
+    <button type="submit">Guardar</button>
+    <a href="{% url 'excursiones:lista_excursiones' %}">Cancelar</a>
+</form>

@@ -12,6 +12,7 @@ class Perfil(User):
     token=models.UUIDField(null=True,blank=True,editable=True,verbose_name='Token')
     activo=models.BooleanField(default=False, verbose_name='Activo')
     
+    USERNAME_FIELD='email'
     class Meta:
         verbose_name='perfil'
         verbose_name_plural='perfiles'

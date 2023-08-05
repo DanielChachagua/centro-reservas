@@ -134,6 +134,8 @@ AUTH_USER_MODEL = 'usuarios.User'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media/'
 
 EMAIL_BACKEND=config.credenciales_email['email_backend']
 EMAIL_HOST=config.credenciales_email['email_host']

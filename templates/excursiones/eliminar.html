@@ -1,0 +1,7 @@
+<h2>Confirmar eliminación de la excursión "{{ object.titulo }}"</h2>
+  <form method="post">
+    {% csrf_token %}
+    <p>¿Estás seguro de que deseas eliminar la excursión "{{ object.titulo }}"?</p>
+    <input type="submit" value="Eliminar">
+    <a href="{% url 'excursiones:lista_excursiones' %}">Cancelar</a>
+  </form>

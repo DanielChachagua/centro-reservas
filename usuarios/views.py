@@ -4,10 +4,11 @@ from django.db.models.query import QuerySet
 from django.http import JsonResponse,HttpResponse
 from django.shortcuts import render, redirect,get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView, FormView
 from django.core.mail import EmailMessage
-from .forms import RegisterForm, ConfirmarMail
+from .forms import UserRegisterForm, ConfirmarMail, UserUpdateForm
 from .models import Perfil
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -44,17 +45,17 @@ class PerfilesListView(ListView):
     
 class PerfilCreateView(CreateView):
     model=Perfil
-    form_class=RegisterForm
-    template_name='usuarios/crear.html'
-    #success_url = reverse_lazy('usuarios:lista_usuarios')  # Cambia 'nombre_de_la_url_exitosa' por la URL a la que quieres redirigir
+    form_class=UserRegisterForm
+    template_name='usuarios/form.html'
+    success_url = reverse_lazy('usuarios:lista_usuarios')  # Cambia 'nombre_de_la_url_exitosa' por la URL a la que quieres redirigir
     
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs) -> HttpResponse:
         return super().dispatch(request, *args, **kwargs)
 
-    def form_valid(self, form):
-        form.save()
-        return HttpResponse("¡Perfil creado exitosamente!")
+    # def form_valid(self, form):
+    #     form.save()
+    #     return HttpResponse("¡Perfil creado exitosamente!")
 
     def send_mail_confirmacion(self,data):
         mensaje={}
@@ -79,7 +80,8 @@ class PerfilCreateView(CreateView):
     
     def post(self,request,*args,**kwargs):
         try:
-            form= RegisterForm(request.POST)
+            #form= RegisterForm(request.POST)
+            form= self.form_class(request.POST)
             if form.is_valid():
                 data=form.cleaned_data
                 perfil = form.save(commit=False)
@@ -87,9 +89,9 @@ class PerfilCreateView(CreateView):
                 perfil.save()
                 data['token']=perfil.token
                 self.send_mail_confirmacion(data)
-                return redirect('usuarios:lista_usuarios')
-            else:
-                print(form.errors)
+                return redirect(self.success_url)
+            
+            return render(request,self.template_name,{'form':form})
         except Exception as e:
             print(str(e))
            
@@ -100,4 +102,29 @@ def confirmar_mail(request,token):
     perfil.save()
     return redirect('usuarios:lista_usuarios')
 
+class PerfilUpdateView(UpdateView):
+    model=Perfil
+    form_class=UserUpdateForm
+    template_name='usuarios/form.html'
+    success_url = reverse_lazy('usuarios:lista_usuarios')
+    
+class CambiarPassword(FormView):
+    model = Perfil
+    form_class = PasswordChangeForm
+    template_name = 'usuarios/cambio_pass.html'
+    success_url = reverse_lazy('login') 
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            form = PasswordChangeForm(user=request.user, data=request.POST)
+            if form.is_valid():
+                form.save()
+                #update_session_auth_hash(request, form.user)
+            else:
+                return JsonResponse('hola no mundo del form')
+            
+        except Exception as e:
+            return JsonResponse('hola no mundo')
+        return JsonResponse('hola mundo') 
+    
         
