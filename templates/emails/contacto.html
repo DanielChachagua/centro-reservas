@@ -1,5 +1,16 @@
-<form action="" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form}}
-    <button type="submit">Enviar</button>
-</form>
+{% extends 'home/base.html' %}
+{% load static %}
+
+
+{% block contenido %}
+    <div class="d-flex justify-content-center align-items-center w-100" style="background-image: url('{% static 'imagenes/cafayate.png' %}');background-size: cover; background-position: center;">
+        <div class="glass-card">
+            <h1 class="fs-1 text-center mt-3" style="color:white;">Contáctanos!</h1>    
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button type="submit" class="botones btn">Enviar</button>
+            </form>
+        </div>
+    </div>
+    {% endblock contenido %}

@@ -1,1 +1,30 @@
-<h1>Hola mundo</h1>
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block contenido %}
+<div class="d-flex justify-content-center align-items-center w-100" style="height: calc(100vh - 63.5px); background-image: url('{% static 'imagenes/cafayate.png' %}');background-size: cover; background-position: center;">
+    <div class="glass-card">    
+        <h1 class="titulo fs-1">Excursiones Cafayate</h1>
+        <p class="parrafo">
+            Estamos encantados de recibirte en nuestra página web. Somos una empresa apasionada por la naturaleza y la belleza escénica de Cafayate, un lugar mágico y único en Argentina.<br>
+
+            Nuestro objetivo es brindarte experiencias inolvidables en medio de paisajes impresionantes, viñedos interminables y formaciones rocosas que te dejarán sin aliento. Si estás buscando aventura, cultura y momentos de relajación en un entorno sin igual, has llegado al lugar correcto.</p>
+    </div>
+</div>
+<div class="d-flex flex-column justify-content-center align-items-center w-100" style="height: calc(100vh - 63.5px);">
+    <h1 class="fs-1">Excursiones Cafayate</h1>
+    <p class="text-center  w-75 fs-5">Desde recorridos por bodegas boutique con degustaciones de vinos exquisitos hasta aventuras en bicicleta por los valles más asombrosos, nuestras opciones están pensadas para que cada momento con nosotros sea especial y memorable.</p>
+    <div class="galeria">
+        <img src="{% static 'imagenes/1.png' %}" alt="">
+        <img src="{% static 'imagenes/2.png' %}" alt="">
+        <img src="{% static 'imagenes/3.png' %}" alt="">
+        <img src="{% static 'imagenes/4.png' %}" alt="">
+        <img src="{% static 'imagenes/5.png' %}" alt="">
+    </div>
+</div>
+    
+<div class='d-column w-100 p-3' style="height: calc(100vh - 63.5px); background-image: url('{% static 'imagenes/cafayate.png' %}');background-size: cover; background-position: center;">
+
+</div>
+{% endblock contenido %}
+    

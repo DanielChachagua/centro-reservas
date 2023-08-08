@@ -25,7 +25,7 @@ urlpatterns = [
     path('home/',Home.as_view(),name='home'),
     path('',Home.as_view(),name='index'),
     path('usuarios/',include('usuarios.urls',namespace='usuarios')),
-    path('excursion/',include('excursiones.urls',namespace='excursiones')),
+    path('excursiones/',include('excursiones.urls',namespace='excursiones')),
     path('contacto/',include('contacto.urls',namespace='contacto')),
 ]
 

@@ -1,0 +1,53 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+
+{% block contenido %}
+
+<section>
+    <div style="margin:0 auto;">
+        <div class="carousel">
+            <input type="radio" name="slides" checked="checked" id="slide-1">
+            <input type="radio" name="slides" id="slide-2">
+            <input type="radio" name="slides" id="slide-3">
+            <input type="radio" name="slides" id="slide-4">
+            <input type="radio" name="slides" id="slide-5">
+            <input type="radio" name="slides" id="slide-6">
+            <ul class="carousel__slides">
+                {% for c in object_list %}
+                    {% if c.disponible  %}
+                        <li class="carousel__slide">
+                            <figure>
+                                <div class="glass-card" style="width:800px; height:500px">
+                                    <img src="{{ c.imagen.url }}" style="width:100%; height:100%;" alt="">
+                                </div>
+                                <figcaption>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    <span class="credit">Photo: Tim Marshall</span>
+                                </figcaption>
+                            </figure>
+                        </li>
+                        {% endif %}
+
+                        {% endfor %}
+            </ul>    
+            <ul class="carousel__thumbnails">
+                
+                    
+                
+                {% for c in object_list %}
+                {% if c.disponible  %}
+                <h1>{{letra}}</h1>                    
+                <li>
+                    <label for="slide-{{ forloop.counter }}"><img src="{{ c.imagen.url }}" style="width:150px; height:150px;" alt=""></label>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</section>
+
+
+{% endblock contenido %}
+

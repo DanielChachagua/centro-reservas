@@ -4,6 +4,7 @@ from .views import *
 app_name = "excursiones"
 
 urlpatterns = [
+    path('', ExcursionHome.as_view(),name='excursiones'),
     path('listar/', ExcursionList.as_view(),name='lista_excursiones'),
     path('crear/',ExcursionCreate.as_view(),name='crear_excursion'),
     path('editar/<int:pk>',ExcursionUpdate.as_view(),name='editar_excursion'),

@@ -1,3 +1,6 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
 {% for c in object_list %}
     {% if c.disponible  %}
     <h1>{{c.titulo}}</h1>
