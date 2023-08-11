@@ -1,10 +1,41 @@
 {% extends 'home/base.html' %}
 {% load static %}
 
+
+{% block js %}
+<script>
+        function loadContent(url) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // Crear un nuevo objeto DOMParser
+                var parser = new DOMParser();
+                // Parsear el this.responseText como un documento HTML
+                var responseDoc = parser.parseFromString(this.responseText, "text/html");
+                // Obtener el elemento con el ID "contacto" del documento parseado
+                var contactoDiv = responseDoc.getElementById("contacto");
+                // Verificar si se encontró el elemento "contacto"
+                if (contactoDiv) {
+                    // Obtener el contenido HTML del elemento "contacto"
+                    var contactoHtml = contactoDiv.innerHTML;
+                    // Insertar el contenido HTML en el elemento con el ID "contacto" en la página actual
+                    document.getElementById("contacto").innerHTML = contactoHtml;
+                }
+            }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+    // Abrir y enviar la solicitud GET a la URL proporcionada
+    loadContent("{% url 'contacto:contacto_home' %}");
+</script>
+{% endblock js %}
+    
+
 {% block contenido %}
 <div class="d-flex justify-content-center align-items-center w-100" style="height: calc(100vh - 63.5px); background-image: url('{% static 'imagenes/cafayate.png' %}');background-size: cover; background-position: center;">
-    <div class="glass-card">    
-        <h1 class="titulo fs-1">Excursiones Cafayate</h1>
+    <div class="glass-card d-flex flex-column justify-content-center align-items-center">    
+        <h1 class="titulo">Excursiones Cafayate</h1>
         <p class="parrafo">
             Estamos encantados de recibirte en nuestra página web. Somos una empresa apasionada por la naturaleza y la belleza escénica de Cafayate, un lugar mágico y único en Argentina.<br>
 
@@ -23,8 +54,15 @@
     </div>
 </div>
     
-<div class='d-column w-100 p-3' style="height: calc(100vh - 63.5px); background-image: url('{% static 'imagenes/cafayate.png' %}');background-size: cover; background-position: center;">
-
+<div class="d-flex justify-content-center align-items-center w-100" id="contacto" style="background-image: url('{% static 'imagenes/cafayate.png' %}');background-size: cover; background-position: center;">
+    <div class="glass-card">
+        <h1 class="fs-1 text-center mt-3" style="color:white;">Contáctanos!</h1>    
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit" class="botones btn">Enviar</button>
+        </form>
+    </div>
 </div>
 {% endblock contenido %}
     

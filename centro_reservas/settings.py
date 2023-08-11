@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'contacto',
     'excursiones',
     'reservas',
+    'administracion',
 ]
 
 MIDDLEWARE = [

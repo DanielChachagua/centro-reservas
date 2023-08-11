@@ -38,8 +38,11 @@ class Contacto(FormView):
             email=EmailMessage('Byte-Force', 'Usuario: {} \nTeléfono: {} \nCorreo: {} \nMensaje: \n\n{}'.format(nombre,telefono,email,contenido),"",['byte.force.devs@gmail.com'],reply_to=[email])
             try:
                 email.send()
-                time.sleep(1.5)
                 return redirect('/home/')
             except:
                 return redirect('/contacto/?no_valido/')
+            
+class ContactoHome(Contacto):
+    template_name= 'home/home.html'
+    success_url= '/home/'            
         
